@@ -103,7 +103,7 @@ LDSCRIPT = $(FIRMWARE_DIR)/RISCV/env_Eclipse/GD32VF103x8.lds
 # libraries
 #LIBS = -lc_nano -lm
 LIBDIR = 
-LDFLAGS = -flto $(ARCH) -T$(LDSCRIPT) $(LIBDIR) $(LIBS) $(PERIFLIB_SOURCES) -Wl,--no-relax -Wl,--gc-sections -Wl,-M=$(BUILD_DIR)/$(TARGET).map -nostartfiles #-ffreestanding -nostdlib
+LDFLAGS = -flto $(ARCH) -T$(LDSCRIPT) $(LIBDIR) $(LIBS) $(PERIFLIB_SOURCES) -Wl,--cref -Wl,--no-relax -Wl,--gc-sections -Wl,-M=$(BUILD_DIR)/$(TARGET).map -nostartfiles #-ffreestanding -nostdlib
 
 # default action: build all
 all: $(BUILD_DIR)/$(TARGET).elf $(BUILD_DIR)/$(TARGET).hex $(BUILD_DIR)/$(TARGET).bin
@@ -152,8 +152,16 @@ $(BUILD_DIR):
 clean:
 	-rm -fR .dep $(BUILD_DIR)
 flash: all
-	$()openocd -f ./openocd_ft2232.cfg -c init -c "halt; flash protect 0 0 last off; \
-			program {build\gd32vf103.elf} verify ; mww 0xe004200c 0x4b5a6978; mww 0xe0042008 0x01; resume; exit;"
+	-openocd -f ./openocd_ft2232.cfg -c init -c " flash protect 0 0 last off; \
+			program {$(BUILD_DIR)/$(TARGET).elf} verify; mww 0xe004200c 0x4b5a6978; mww 0xe0042008 0x01; resume; exit 0;"
+
+dfu: all
+	dfu-util -d 28e9:0189 -a 0 --dfuse-address 0x08000000:leave -D $(BUILD_DIR)/$(TARGET).bin
+
+#Remove ':leave', the microcontroller will not boot to application when finished programming.
+
+uart: all
+	stm32flash -w $(BUILD_DIR)/$(TARGET).bin /dev/ttyUSB0
 
 #######################################
 # dependencies
