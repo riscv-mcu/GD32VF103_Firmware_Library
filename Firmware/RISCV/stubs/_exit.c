@@ -4,7 +4,7 @@
 
 #include "stub.h"
 
-
+#if 0
 void _exit(int code)
 {
   const char message[] = "\nProgram has exited with code:";
@@ -15,3 +15,4 @@ void _exit(int code)
 
   for (;;);
 }
+#endif
