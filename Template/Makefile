@@ -11,7 +11,7 @@ TARGET = gd32vf103
 # building variables
 ######################################
 # debug build?
-DEBUG = 0
+DEBUG = 1
 # optimization
 OPT = -O2
 
@@ -92,7 +92,7 @@ CFLAGS += -g -gdwarf-2
 endif
 
 # Generate dependency information
-CFLAGS += -std=gnu11 -MMD -MP # -MF$(@:%.o=%.d) -MT$(@:%.o=%.d)
+CFLAGS += -std=gnu11 -MMD -MP #.deps/$(notdir $(<:.c=.d)) -MF$(@:%.o=%.d) -MT$(@:%.o=%.d)
 
 #######################################
 # LDFLAGS
@@ -118,13 +118,16 @@ vpath %.c $(sort $(dir $(C_SOURCES)))
 OBJECTS += $(addprefix $(BUILD_DIR)/,$(notdir $(ASM_SOURCES:.s=.o)))
 vpath %.s $(sort $(dir $(ASM_SOURCES)))
 
-$(BUILD_DIR)/%.o: %.c Makefile | $(BUILD_DIR) 
+$(BUILD_DIR)/%.o: %.c Makefile | $(BUILD_DIR) .deps
 	@echo "CC $<"
-	@$(CC) -c $(CFLAGS) -Wa,-a,-ad,-alms=$(BUILD_DIR)/$(notdir $(<:.c=.lst)) $< -o $@
+	@$(CC) -c $(CFLAGS) -MMD -MP \
+		-MF .deps/$(notdir $(<:.c=.d)) \
+		-Wa,-a,-ad,-alms=$(BUILD_DIR)/$(notdir $(<:.c=.lst)) $< -o $@
 
-$(BUILD_DIR)/%.o: %.s Makefile | $(BUILD_DIR)
+$(BUILD_DIR)/%.o: %.s Makefile | $(BUILD_DIR) .deps
 	@echo "AS $<"
-	@$(AS) -c $(CFLAGS) $< -o $@
+	@$(AS) -c $(CFLAGS) -MMD -MP  \
+		-MF .deps/$(notdir $(<:.s=.d)) $< -o $@
 
 $(BUILD_DIR)/$(TARGET).elf: $(OBJECTS) Makefile
 	@echo "LD $@"
@@ -145,12 +148,15 @@ $(BUILD_DIR)/%.bin: $(BUILD_DIR)/%.elf | $(BUILD_DIR)
 $(BUILD_DIR):
 	mkdir $@
 
+.deps:
+	mkdir $@
+
 #######################################
 # clean up
 #######################################
 
 clean:
-	-rm -fR .dep $(BUILD_DIR)
+	-rm -fR .deps $(BUILD_DIR)
 flash: all
 	-openocd -f ./openocd_ft2232.cfg -c init -c " flash protect 0 0 last off; \
 			program {$(BUILD_DIR)/$(TARGET).elf} verify; mww 0xe004200c 0x4b5a6978; mww 0xe0042008 0x01; resume; exit 0;"
@@ -166,6 +172,6 @@ uart: all
 #######################################
 # dependencies
 #######################################
-#-include $(shell mkdir .dep 2>/dev/null) $(wildcard .dep/*)
+-include $(shell mkdir .deps 2>/dev/null) $(wildcard .deps/*)
 
 # *** EOF ***
