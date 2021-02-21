@@ -386,7 +386,7 @@ typedef struct {
 	uint8_t tx_ft; /*!< type of frame, data or remote */
 	uint8_t tx_dlen; /*!< data length */
 	uint8_t tx_data[8]; /*!< transmit data */
-} can_trasnmit_message_struct;
+} can_transmit_message_struct;
 
 /* CAN receive message struct */
 typedef struct {
@@ -675,7 +675,7 @@ void can_time_trigger_mode_disable(uint32_t can_periph);
 /* transmit functions */
 /* transmit CAN message */
 uint8_t can_message_transmit(uint32_t can_periph,
-		can_trasnmit_message_struct* transmit_message);
+		can_transmit_message_struct* transmit_message);
 /* get CAN transmit state */
 can_transmit_state_enum can_transmit_states(uint32_t can_periph,
 		uint8_t mailbox_number);
