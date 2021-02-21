@@ -114,7 +114,7 @@ int main(void)
 */
 ErrStatus can_loopback(void)
 {
-    can_trasnmit_message_struct transmit_message;
+    can_transmit_message_struct transmit_message;
     can_receive_message_struct  receive_message;
     uint32_t timeout = 0xFFFF;
     uint8_t transmit_mailbox = 0;
@@ -170,7 +170,7 @@ ErrStatus can_loopback(void)
 */
 ErrStatus can_loopback_interrupt(void)
 {
-    can_trasnmit_message_struct transmit_message;
+    can_transmit_message_struct transmit_message;
     uint32_t timeout = 0x0000FFFF;
     
     /* initialize CAN and filter */

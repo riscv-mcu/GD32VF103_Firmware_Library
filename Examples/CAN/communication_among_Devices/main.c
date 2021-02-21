@@ -50,7 +50,7 @@ OF SUCH DAMAGE.
 FlagStatus receive_flag;
 uint8_t transmit_number = 0x0;
 can_receive_message_struct receive_message;
-can_trasnmit_message_struct transmit_message;
+can_transmit_message_struct transmit_message;
     
 void clic_config(void);
 void led_config(void);
