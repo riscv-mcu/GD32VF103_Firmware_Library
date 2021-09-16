@@ -35,7 +35,7 @@ OF SUCH DAMAGE.
 #ifndef GD32VF103_H
 #define GD32VF103_H
 
-#ifdef cplusplus
+#ifdef __cplusplus
  extern "C" {
 #endif 
 
@@ -176,7 +176,9 @@ typedef enum IRQn
 
 /* enum definitions */
 typedef enum {DISABLE = 0, ENABLE = !DISABLE} EventStatus, ControlStatus;
+#ifndef __cplusplus
 typedef enum {FALSE = 0, TRUE = !FALSE} bool;
+#endif
 typedef enum {RESET = 0, SET = 1,MAX = 0X7FFFFFFF} FlagStatus;
 typedef enum {ERROR = 0, SUCCESS = !ERROR} ErrStatus;
 
@@ -235,7 +237,7 @@ typedef enum {ERROR = 0, SUCCESS = !ERROR} ErrStatus;
 #include "gd32vf103_libopt.h"
 #endif /* USE_STDPERIPH_DRIVER */
 
-#ifdef cplusplus
+#ifdef __cplusplus
 }
 #endif
 #endif 
