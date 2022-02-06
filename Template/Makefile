@@ -127,7 +127,7 @@ $(BUILD_DIR)/%.o: %.c Makefile | $(BUILD_DIR) .deps
 $(BUILD_DIR)/%.o: %.S Makefile | $(BUILD_DIR) .deps
 	@echo "AS $<"
 	@$(AS) -c $(CFLAGS) -MMD -MP  \
-		-MF .deps/$(notdir $(<:.s=.d)) $< -o $@
+		-MF .deps/$(notdir $(<:.S=.d)) $< -o $@
 
 $(BUILD_DIR)/$(TARGET).elf: $(OBJECTS) Makefile
 	@echo "LD $@"
