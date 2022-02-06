@@ -34,8 +34,8 @@ $(wildcard src/*.c) \
 $(wildcard ./*.c) 
 # ASM sources
 ASM_SOURCES =  \
-$(FIRMWARE_DIR)/RISCV/env_Eclipse/start.s \
-$(FIRMWARE_DIR)/RISCV/env_Eclipse/entry.s
+$(FIRMWARE_DIR)/RISCV/env_Eclipse/start.S \
+$(FIRMWARE_DIR)/RISCV/env_Eclipse/entry.S
 
 ######################################
 # firmware library
@@ -115,8 +115,8 @@ all: $(BUILD_DIR)/$(TARGET).elf $(BUILD_DIR)/$(TARGET).hex $(BUILD_DIR)/$(TARGET
 OBJECTS = $(addprefix $(BUILD_DIR)/,$(notdir $(C_SOURCES:.c=.o)))
 vpath %.c $(sort $(dir $(C_SOURCES)))
 # list of ASM program objects
-OBJECTS += $(addprefix $(BUILD_DIR)/,$(notdir $(ASM_SOURCES:.s=.o)))
-vpath %.s $(sort $(dir $(ASM_SOURCES)))
+OBJECTS += $(addprefix $(BUILD_DIR)/,$(notdir $(ASM_SOURCES:.S=.o)))
+vpath %.S $(sort $(dir $(ASM_SOURCES)))
 
 $(BUILD_DIR)/%.o: %.c Makefile | $(BUILD_DIR) .deps
 	@echo "CC $<"
@@ -124,7 +124,7 @@ $(BUILD_DIR)/%.o: %.c Makefile | $(BUILD_DIR) .deps
 		-MF .deps/$(notdir $(<:.c=.d)) \
 		-Wa,-a,-ad,-alms=$(BUILD_DIR)/$(notdir $(<:.c=.lst)) $< -o $@
 
-$(BUILD_DIR)/%.o: %.s Makefile | $(BUILD_DIR) .deps
+$(BUILD_DIR)/%.o: %.S Makefile | $(BUILD_DIR) .deps
 	@echo "AS $<"
 	@$(AS) -c $(CFLAGS) -MMD -MP  \
 		-MF .deps/$(notdir $(<:.s=.d)) $< -o $@
