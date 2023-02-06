@@ -58,7 +58,7 @@ FlagStatus can0_error_flag;
 FlagStatus can1_error_flag;
 can_parameter_struct can_init_parameter;
 can_filter_parameter_struct can_filter_parameter;
-can_trasnmit_message_struct transmit_message;
+can_transmit_message_struct transmit_message;
 can_receive_message_struct receive_message;
 
 void clic_config(void);

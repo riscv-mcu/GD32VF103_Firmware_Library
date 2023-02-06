@@ -103,14 +103,14 @@ void can_struct_para_init(can_struct_type_enum type, void* p_struct)
         /* used for can_message_transmit() */
         case CAN_TX_MESSAGE_STRUCT:
             for(i = 0U; i < 8U; i++){
-                ((can_trasnmit_message_struct*)p_struct)->tx_data[i] = 0U;
+                ((can_transmit_message_struct*)p_struct)->tx_data[i] = 0U;
             }
             
-            ((can_trasnmit_message_struct*)p_struct)->tx_dlen = 0u;
-            ((can_trasnmit_message_struct*)p_struct)->tx_efid = 0U;
-            ((can_trasnmit_message_struct*)p_struct)->tx_ff = (uint8_t)CAN_FF_STANDARD;
-            ((can_trasnmit_message_struct*)p_struct)->tx_ft = (uint8_t)CAN_FT_DATA;
-            ((can_trasnmit_message_struct*)p_struct)->tx_sfid = 0U;
+            ((can_transmit_message_struct*)p_struct)->tx_dlen = 0u;
+            ((can_transmit_message_struct*)p_struct)->tx_efid = 0U;
+            ((can_transmit_message_struct*)p_struct)->tx_ff = (uint8_t)CAN_FF_STANDARD;
+            ((can_transmit_message_struct*)p_struct)->tx_ft = (uint8_t)CAN_FT_DATA;
+            ((can_transmit_message_struct*)p_struct)->tx_sfid = 0U;
             
             break;
         /* used for can_message_receive() */
@@ -427,7 +427,7 @@ void can_time_trigger_mode_disable(uint32_t can_periph)
     \param[out] none
     \retval     mailbox_number
 */
-uint8_t can_message_transmit(uint32_t can_periph, can_trasnmit_message_struct* transmit_message)
+uint8_t can_message_transmit(uint32_t can_periph, can_transmit_message_struct* transmit_message)
 {
     uint8_t mailbox_number = CAN_MAILBOX0;
 
